@@ -2,6 +2,8 @@
 
 A secure, user-friendly web3 wallet web app inspired by Backpack, featuring non-custodial and optional custodial key management, multi-chain support, and integrated token swapping.
 
+**Repository**: [https://github.com/Suryanshu-Nabheet/WalletX.git](https://github.com/Suryanshu-Nabheet/WalletX.git)
+
 ## 🚀 Features
 
 - **Authentication**: Email/password, OAuth (Google/Apple), WebAuthn (passkeys)
@@ -50,36 +52,63 @@ WalletX/
 - PostgreSQL 14+
 - Docker (optional, for local development)
 
-### Installation
+### Quick Installation
 
-1. Clone and install dependencies:
+**Option 1: Automated Setup (Recommended)**
 ```bash
+git clone https://github.com/Suryanshu-Nabheet/WalletX.git
+cd WalletX
+./install-fixed.sh
+```
+
+**Option 2: Manual Setup (If you encounter workspace errors)**
+```bash
+git clone https://github.com/Suryanshu-Nabheet/WalletX.git
+cd WalletX
+
+# Install root dependencies
 npm install
+
+# Build shared package first
+cd shared && npm install && npm run build && cd ..
+
+# Install backend
+cd backend && npm install && cd ..
+
+# Install frontend
+cd frontend && npm install && cd ..
 ```
 
-2. Set up environment variables:
+3. Set up environment variables:
 ```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env.local
+# Backend - create backend/.env (see backend/.env.example)
+# Frontend - create frontend/.env.local with NEXT_PUBLIC_API_URL=http://localhost:4000
 ```
 
-3. Start PostgreSQL database:
+4. Start PostgreSQL database:
 ```bash
+# Try newer syntax first
+docker compose up -d postgres
+
+# Or older syntax
 docker-compose up -d postgres
 ```
 
-4. Run database migrations:
+5. Run database migrations:
 ```bash
-cd backend && npm run prisma:migrate
+cd backend && npm run prisma:migrate && cd ..
 ```
 
-5. Start development servers:
+6. Start development servers:
 ```bash
 npm run dev
+# or use ./run.sh
 ```
 
-Frontend: http://localhost:3000
-Backend API: http://localhost:4000
+**Frontend**: http://localhost:3000  
+**Backend API**: http://localhost:4000
+
+📖 For detailed setup instructions, see [GETTING_STARTED.md](./GETTING_STARTED.md)
 
 ## 📖 Documentation
 

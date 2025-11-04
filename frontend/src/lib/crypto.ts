@@ -153,14 +153,21 @@ export async function validateMnemonic(mnemonic: string): Promise<boolean> {
 
 /**
  * Derive wallet from mnemonic
+ * Uses BIP44 standard path for Ethereum: m/44'/60'/0'/0/accountIndex
  */
 export async function deriveWalletFromMnemonic(
   mnemonic: string,
-  derivationPath: string = "m/44'/60'/0'/0/0",
+  accountIndex: number = 0,
 ): Promise<{ address: string; privateKey: string }> {
   const { ethers } = await import('ethers');
-  const hdNode = ethers.HDNodeWallet.fromPhrase(mnemonic);
-  const wallet = hdNode.derivePath(derivationPath);
+  
+  // Create HDNode from mnemonic (this is the master node)
+  const masterNode = ethers.HDNodeWallet.fromPhrase(mnemonic);
+  
+  // Derive using BIP44 path: m/44'/60'/0'/0/accountIndex
+  // Note: derivePath expects a relative path, not starting with "m/"
+  const derivationPath = `44'/60'/0'/0/${accountIndex}`;
+  const wallet = masterNode.derivePath(derivationPath);
   
   return {
     address: wallet.address,

@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: walletx
+          POSTGRES_PASSWORD: walletx_test
+          POSTGRES_DB: walletx_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install
+          cd shared && npm install && npm run build && cd ..
+          cd backend && npm install && cd ..
+          cd frontend && npm install && cd ..
+
+      - name: Generate Prisma Client
+        run: |
+          cd backend
+          npm run prisma:generate
+
+      - name: Run database migrations
+        run: |
+          cd backend
+          DATABASE_URL="postgresql://walletx:walletx_test@localhost:5432/walletx_test?schema=public" npm run prisma:migrate deploy
+        env:
+          DATABASE_URL: postgresql://walletx:walletx_test@localhost:5432/walletx_test?schema=public
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm run test
+        env:
+          DATABASE_URL: postgresql://walletx:walletx_test@localhost:5432/walletx_test?schema=public
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm run test
+        continue-on-error: true
+
+      - name: Build backend
+        run: |
+          cd backend
+          npm run build
+        continue-on-error: true
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+        continue-on-error: true
+

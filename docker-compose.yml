@@ -1,5 +1,8 @@
 version: '3.8'
 
+# Note: Use 'docker compose' (without hyphen) for newer Docker versions
+# Or 'docker-compose' (with hyphen) for older versions
+
 services:
   postgres:
     image: postgres:15-alpine

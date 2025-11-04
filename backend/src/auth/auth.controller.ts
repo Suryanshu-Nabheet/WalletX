@@ -121,16 +121,19 @@ export class AuthController {
     return res.json({ message: 'Logged out successfully' });
   }
 
-  @Post('google')
+  @Get('google')
   @UseGuards(AuthGuard('google'))
   async googleAuth() {
     // This route initiates Google OAuth
   }
 
-  @Post('google/callback')
+  @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleAuthCallback(@Req() req: Request, @Res() res: Response) {
     const user = req.user as any;
+    if (!user || !user.id) {
+      return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/login?error=oauth_failed`);
+    }
     const tokens = await this.authService.generateTokens(user.id, user.email);
 
     res.cookie('refreshToken', tokens.refreshToken, {
