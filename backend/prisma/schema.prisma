@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String?   // null if OAuth only
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLogin     DateTime?
+  twoFaEnabled  Boolean   @default(false)
+  twoFaSecret   String?
+  oauthProvider String?   // 'google', 'apple', etc.
+  oauthId       String?
+  userSettings  Json      @default("{}")
+  sessions      Session[]
+  wallets       Wallet[]
+  auditLogs     AuditLog[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Wallet {
+  id            String    @id @default(cuid())
+  userId        String
+  chain         String    // e.g., 'ethereum', 'polygon'
+  address       String
+  encryptedBlob Json?     // {ciphertext, iv, salt, kdf, kdf_params, version}
+  blobVersion   String?   @default("1.0.0")
+  mode          String    // 'noncustodial' | 'custodial'
+  kmsKeyId      String?   // For custodial mode
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chain])
+  @@index([userId])
+  @@index([address])
+  @@map("wallets")
+}
+
+model Session {
+  id               String   @id @default(cuid())
+  userId           String
+  refreshTokenHash String
+  expiresAt        DateTime
+  ip               String?
+  userAgent        String?
+  createdAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([refreshTokenHash])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String   // e.g., 'wallet.created', 'tx.sent', 'login.success'
+  meta      Json     @default("{}")
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
