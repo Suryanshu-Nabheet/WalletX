@@ -14,7 +14,7 @@ export default function LoginPage() {
   // Redirect to onboarding if no vault exists
   if (!isInitialized) {
     if (typeof window !== 'undefined') {
-      router.push('/onboarding');
+      router.push('/onboarding/import');
     }
     return null;
   }
@@ -41,9 +41,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full glass-card rounded-2xl p-8">
-        <h1 className="text-3xl font-bold text-center mb-8 text-white">
-          Welcome Back
+        <h1 className="text-3xl font-bold text-center mb-2 text-white">
+          Unlock Wallet
         </h1>
+        <p className="text-center text-gray-400 mb-8 text-sm">
+          Enter your password to access your paired wallet.
+        </p>
 
         <form onSubmit={handleUnlock} className="space-y-6">
           <div>
@@ -74,18 +77,19 @@ export default function LoginPage() {
             {loading ? 'Unlocking...' : 'Unlock Wallet'}
           </button>
 
-          <div className="text-center mt-4">
+          <div className="text-center mt-6 pt-6 border-t border-gray-700">
+            <p className="text-sm text-gray-400 mb-2">Not your wallet?</p>
             <button
               type="button"
               onClick={() => {
-                if (confirm('Are you sure? This will wipe your wallet from this device.')) {
+                if (confirm('Are you sure? This will wipe the current wallet from this device and allow you to pair a new one.')) {
                   useWalletStore.getState().resetWallet();
-                  router.push('/onboarding');
+                  router.push('/onboarding/import');
                 }
               }}
-              className="text-sm text-red-400 hover:text-red-300"
+              className="text-sm text-blue-400 hover:text-blue-300 font-medium"
             >
-              Reset Wallet
+              Pair Different Wallet
             </button>
           </div>
         </form>

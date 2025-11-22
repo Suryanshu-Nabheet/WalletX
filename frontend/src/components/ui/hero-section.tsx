@@ -2,8 +2,15 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function HeroSection() {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     return (
         <div className="relative mx-auto flex min-h-screen flex-col items-center justify-center bg-black overflow-hidden">
             <Navbar />
@@ -47,8 +54,8 @@ export default function HeroSection() {
                     className="relative z-10 mx-auto max-w-2xl py-8 text-center text-lg md:text-xl font-normal text-neutral-400"
                 >
                     Manage your crypto assets with enterprise-grade security.
-                    Swap, track, and transact with a premium, client-side wallet experience.
-                    No database, just you and the blockchain.
+                    Pair your existing <strong>Phantom</strong> or <strong>Backpack</strong> wallet,
+                    or unlock your secure vault. No database, just you and the blockchain.
                 </motion.p>
 
                 <motion.div
@@ -59,12 +66,13 @@ export default function HeroSection() {
                 >
                     <Link href="/login">
                         <button className="w-64 transform rounded-xl bg-white px-8 py-4 font-bold text-black transition-all duration-300 hover:-translate-y-1 hover:bg-gray-100 hover:shadow-2xl hover:shadow-white/20">
-                            Launch App
+                            Unlock Wallet
                         </button>
                     </Link>
-                    <Link href="https://github.com/Suryanshu-Nabheet/WalletX" target="_blank">
-                        <button className="w-64 transform rounded-xl border border-neutral-800 bg-black/50 px-8 py-4 font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-neutral-900 hover:border-neutral-700 backdrop-blur-md">
-                            View Source
+
+                    <Link href="/onboarding/import">
+                        <button className="w-64 transform rounded-xl border border-neutral-700 bg-neutral-900/50 px-8 py-4 font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-neutral-800 hover:border-neutral-600 backdrop-blur-md">
+                            Pair Wallet
                         </button>
                     </Link>
                 </motion.div>
@@ -78,10 +86,6 @@ export default function HeroSection() {
                     style={{ perspective: "1000px" }}
                 >
                     <div className="w-full overflow-hidden rounded-2xl border border-neutral-800 bg-black">
-                        {/* Using a placeholder gradient div if image is not available, or the actual verified screenshot if possible. 
-                 Since I can't easily copy the screenshot to public folder right now without a command, I'll use a styled placeholder 
-                 that looks like the dashboard or just the image tag if I assume I can move it. 
-                 For now, I'll use a nice gradient placeholder to represent the dashboard. */}
                         <div className="aspect-[16/9] w-full bg-gradient-to-br from-gray-900 via-black to-blue-900/20 flex items-center justify-center relative overflow-hidden">
                             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
                             <div className="text-center">
@@ -120,7 +124,7 @@ const Navbar = () => {
             <div className="flex gap-4">
                 <Link href="/login">
                     <button className="rounded-lg bg-white px-6 py-2 font-bold text-black transition-all hover:bg-gray-200">
-                        Connect Wallet
+                        Unlock
                     </button>
                 </Link>
             </div>

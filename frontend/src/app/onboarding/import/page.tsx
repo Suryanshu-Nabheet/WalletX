@@ -61,9 +61,12 @@ export default function ImportWalletPage() {
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="max-w-md w-full glass-card rounded-2xl p-8">
-                <h1 className="text-3xl font-bold text-center mb-8 text-white">
-                    Import Wallet
+                <h1 className="text-3xl font-bold text-center mb-2 text-white">
+                    Pair Existing Wallet
                 </h1>
+                <p className="text-center text-gray-400 mb-8 text-sm">
+                    Import your <strong>Phantom</strong> or <strong>Backpack</strong> wallet using your seed phrase or private key.
+                </p>
 
                 <div className="space-y-6">
                     {/* Import Type Selection */}
@@ -109,8 +112,11 @@ export default function ImportWalletPage() {
                     {/* Password Fields */}
                     <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">
-                            New Password
+                            Create New Password
                         </label>
+                        <p className="text-xs text-gray-500 mb-2">
+                            This password will be used to unlock your WalletX vault.
+                        </p>
                         <input
                             type="password"
                             value={password}
@@ -144,7 +150,7 @@ export default function ImportWalletPage() {
                         disabled={loading || !inputValue || !password || !confirmPassword}
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-900/20"
                     >
-                        {loading ? 'Importing...' : 'Import Wallet'}
+                        {loading ? 'Pairing Wallet...' : 'Pair Wallet'}
                     </button>
                 </div>
             </div>
