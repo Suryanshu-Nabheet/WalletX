@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useWalletStore } from '@/store/walletStore';
 
@@ -12,10 +12,13 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   // Redirect to onboarding if no vault exists
-  if (!isInitialized) {
-    if (typeof window !== 'undefined') {
+  useEffect(() => {
+    if (!isInitialized) {
       router.push('/onboarding/import');
     }
+  }, [isInitialized, router]);
+
+  if (!isInitialized) {
     return null;
   }
 

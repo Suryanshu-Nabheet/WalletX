@@ -77,26 +77,45 @@ export default function HeroSection() {
                     </Link>
                 </motion.div>
 
-                {/* Dashboard Preview */}
+
+                {/* Feature Highlights */}
                 <motion.div
-                    initial={{ opacity: 0, y: 40, rotateX: 20 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
-                    className="relative z-10 mt-24 rounded-3xl border border-neutral-800 bg-neutral-900/50 p-4 shadow-2xl shadow-blue-900/20 backdrop-blur-xl"
-                    style={{ perspective: "1000px" }}
+                    className="relative z-10 mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto"
                 >
-                    <div className="w-full overflow-hidden rounded-2xl border border-neutral-800 bg-black">
-                        <div className="aspect-[16/9] w-full bg-gradient-to-br from-gray-900 via-black to-blue-900/20 flex items-center justify-center relative overflow-hidden">
-                            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-                            <div className="text-center">
-                                <div className="w-20 h-20 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/20 mb-6">
-                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-2xl font-bold text-white">WalletX Dashboard</h3>
-                            </div>
+                    {/* Feature 1 */}
+                    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6 backdrop-blur-xl hover:border-neutral-700 transition-all">
+                        <div className="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center mb-4">
+                            <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
                         </div>
+                        <h3 className="text-lg font-bold text-white mb-2">Secure & Private</h3>
+                        <p className="text-sm text-neutral-400">Client-side encryption. Your keys never leave your device.</p>
+                    </div>
+
+                    {/* Feature 2 */}
+                    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6 backdrop-blur-xl hover:border-neutral-700 transition-all">
+                        <div className="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center mb-4">
+                            <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 className="text-lg font-bold text-white mb-2">Multi-Network</h3>
+                        <p className="text-sm text-neutral-400">Support for Ethereum, Polygon, and Sepolia testnet.</p>
+                    </div>
+
+                    {/* Feature 3 */}
+                    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6 backdrop-blur-xl hover:border-neutral-700 transition-all">
+                        <div className="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center mb-4">
+                            <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                            </svg>
+                        </div>
+                        <h3 className="text-lg font-bold text-white mb-2">Easy Import</h3>
+                        <p className="text-sm text-neutral-400">Import from Phantom, Backpack, or any wallet with seed phrase.</p>
                     </div>
                 </motion.div>
             </div>

@@ -46,8 +46,8 @@ export default function ImportWalletPage() {
 
                 try {
                     new ethers.Wallet(cleanPrivateKey);
-                } catch (e) {
-                    throw new Error('Invalid private key');
+                } catch (e: any) {
+                    throw new Error(`Invalid private key: ${e.message || 'Please check the format'}`);
                 }
 
                 // Create empty vault then import
