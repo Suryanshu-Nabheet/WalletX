@@ -13,9 +13,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { SendTransactionDto } from './dto/transaction.dto';
 
 @Controller('api/tx')
-@UseGuards(AuthGuard('jwt'))
 export class TransactionsController {
-  constructor(private transactionsService: TransactionsService) {}
+  constructor(private transactionsService: TransactionsService) { }
 
   @Get('balances')
   async getBalance(
@@ -54,20 +53,10 @@ export class TransactionsController {
   @Post('send')
   async sendTransaction(
     @Body() dto: SendTransactionDto,
-    @Req() req: any,
   ) {
-    const userId = req.user.sub;
-    const ip = req.ip || req.headers['x-forwarded-for'];
-    const userAgent = req.headers['user-agent'];
-
     return this.transactionsService.sendTransaction(
-      userId,
-      dto.walletId,
-      dto.transaction,
-      dto.chainId,
       dto.signedTx,
-      ip,
-      userAgent,
+      dto.chainId,
     );
   }
 

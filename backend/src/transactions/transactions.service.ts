@@ -1,17 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { ethers } from 'ethers';
 import { CHAIN_CONFIGS } from '@walletx/shared';
-import { WalletsService } from '../wallets/wallets.service';
-import { AuditService } from '../audit/audit.service';
 
 @Injectable()
 export class TransactionsService {
-  constructor(
-    private prisma: PrismaService,
-    private walletsService: WalletsService,
-    private auditService: AuditService,
-  ) {}
+  constructor() { }
 
   async getBalance(address: string, chainId: number) {
     const config = CHAIN_CONFIGS[chainId];
@@ -34,7 +27,7 @@ export class TransactionsService {
     // TODO: Integrate with Alchemy/Covalent API for token balances
     // For now, return native balance only
     const nativeBalance = await this.getBalance(address, chainId);
-    
+
     return {
       native: nativeBalance,
       tokens: [], // TODO: Fetch from indexer
@@ -67,57 +60,21 @@ export class TransactionsService {
   }
 
   async sendTransaction(
-    userId: string,
-    walletId: string,
-    transaction: any,
+    signedTx: string,
     chainId: number,
-    signedTx?: string,
-    ip?: string,
-    userAgent?: string,
   ) {
-    const wallet = await this.walletsService.getWallet(userId, walletId);
-
-    if (wallet.mode === 'noncustodial') {
-      // For non-custodial: client signs and sends signed transaction
-      if (!signedTx) {
-        throw new Error('Signed transaction required for non-custodial wallets');
-      }
-
-      const config = CHAIN_CONFIGS[chainId];
-      if (!config) {
-        throw new NotFoundException('Unsupported chain');
-      }
-
-      const provider = new ethers.JsonRpcProvider(config.rpcUrl);
-      const txResponse = await provider.broadcastTransaction(signedTx);
-
-      await this.auditService.log(
-        userId,
-        'tx.sent',
-        {
-          walletId,
-          txHash: txResponse.hash,
-          chainId,
-        },
-        ip,
-        userAgent,
-      );
-
-      return {
-        hash: txResponse.hash,
-        status: 'pending',
-      };
-    } else {
-      // For custodial: server signs and broadcasts
-      const signedTx = await this.walletsService.signTransactionCustodial(
-        userId,
-        walletId,
-        transaction,
-      );
-
-      // TODO: Broadcast transaction
-      throw new Error('Custodial signing not yet fully implemented');
+    const config = CHAIN_CONFIGS[chainId];
+    if (!config) {
+      throw new NotFoundException('Unsupported chain');
     }
+
+    const provider = new ethers.JsonRpcProvider(config.rpcUrl);
+    const txResponse = await provider.broadcastTransaction(signedTx);
+
+    return {
+      hash: txResponse.hash,
+      status: 'pending',
+    };
   }
 
   async getTransactionStatus(txHash: string, chainId: number) {

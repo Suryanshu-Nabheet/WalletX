@@ -10,9 +10,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { SwapQuoteDto, SwapExecuteDto } from './dto/swap.dto';
 
 @Controller('api/swap')
-@UseGuards(AuthGuard('jwt'))
 export class SwapController {
-  constructor(private swapService: SwapService) {}
+  constructor(private swapService: SwapService) { }
 
   @Post('quote')
   async getQuote(@Body() dto: SwapQuoteDto) {
