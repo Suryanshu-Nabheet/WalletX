@@ -8,6 +8,7 @@ export class WalletsService {
   constructor() {
     // Initialize providers (using public RPCs for demo)
     this.providers['ethereum'] = new ethers.JsonRpcProvider('https://eth.llamarpc.com');
+    this.providers['sepolia'] = new ethers.JsonRpcProvider('https://rpc.sepolia.org');
     this.providers['polygon'] = new ethers.JsonRpcProvider('https://polygon-rpc.com');
     // Add more as needed
   }

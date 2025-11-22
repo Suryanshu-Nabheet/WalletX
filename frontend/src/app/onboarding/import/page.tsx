@@ -32,21 +32,27 @@ export default function ImportWalletPage() {
         try {
             if (importType === 'seed') {
                 // Validate mnemonic
-                if (!ethers.Wallet.fromPhrase(inputValue)) {
+                const cleanMnemonic = inputValue.trim();
+                if (!ethers.Wallet.fromPhrase(cleanMnemonic)) {
                     throw new Error('Invalid seed phrase');
                 }
-                await createVault(password, inputValue);
+                await createVault(password, cleanMnemonic);
             } else {
                 // Validate private key
+                let cleanPrivateKey = inputValue.trim();
+                if (!cleanPrivateKey.startsWith('0x')) {
+                    cleanPrivateKey = '0x' + cleanPrivateKey;
+                }
+
                 try {
-                    new ethers.Wallet(inputValue);
+                    new ethers.Wallet(cleanPrivateKey);
                 } catch (e) {
                     throw new Error('Invalid private key');
                 }
 
                 // Create empty vault then import
                 await createVault(password);
-                await importWallet(inputValue, 'ethereum', 'Imported Account');
+                await importWallet(cleanPrivateKey, 'ethereum', 'Imported Account');
             }
 
             router.push('/dashboard');

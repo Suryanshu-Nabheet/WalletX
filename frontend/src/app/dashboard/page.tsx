@@ -55,7 +55,7 @@ export default function DashboardPage() {
     setLoading(true);
     try {
       const balanceData = await api.getBalance(wallet.address, chainId);
-      setBalance(ethers.formatEther(balanceData.balance));
+      setBalance(balanceData.balance);
     } catch (error) {
       console.error('Failed to load balance:', error);
       setBalance('0');
