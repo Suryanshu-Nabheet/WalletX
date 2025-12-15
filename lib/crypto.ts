@@ -10,20 +10,20 @@ async function getKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
     enc.encode(password),
     { name: 'PBKDF2' },
     false,
-    ['deriveBits', 'deriveKey'],
+    ['deriveBits', 'deriveKey']
   );
 
   return window.crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: salt,
+      salt: salt as any,
       iterations: 100000,
       hash: 'SHA-256',
     },
     keyMaterial,
     { name: 'AES-GCM', length: 256 },
     true,
-    ['encrypt', 'decrypt'],
+    ['encrypt', 'decrypt']
   );
 }
 
@@ -39,7 +39,7 @@ export async function encrypt(data: string, password: string): Promise<string> {
       iv: iv,
     },
     key,
-    enc.encode(data),
+    enc.encode(data)
   );
 
   // Combine salt + iv + encrypted data
@@ -72,7 +72,7 @@ export async function decrypt(encryptedData: string, password: string): Promise<
         iv: iv,
       },
       key,
-      data,
+      data
     );
 
     const dec = new TextDecoder();
